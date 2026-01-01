@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawkins Vibe Check</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Merriweather:wght@900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Stranger Things Palette */
+            --st-red: #ff0909;      /* Neon Red */
+            --st-black: #050505;    /* Void Black */
+            --st-glow: #a80000;     /* Darker Red Glow */
+            --st-terminal: #33ff00; /* 80s Terminal Green */
+            --st-amber: #ffb700;    /* Arcade Amber */
+            --st-gray: #b0b0b0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Courier Prime', monospace;
+            background-color: var(--st-black);
+            color: var(--st-gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            
+            /* Upside Down Atmosphere (Subtle Fog) */
+            background-image: 
+                radial-gradient(circle at 50% 50%, #1a0505 0%, #000000 100%);
+        }
+
+        /* Floating Spores Effect (Simple Overlay) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            background: rgba(10, 10, 10, 0.9);
+            width: 100%;
+            max-width: 480px;
+            border: 2px solid var(--st-red);
+            border-radius: 4px;
+            box-shadow: 0 0 15px var(--st-glow), inset 0 0 20px rgba(255, 0, 0, 0.1);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        /* The Iconic Header Style */
+        .header {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--st-red);
+        }
+
+        h1 {
+            font-family: 'Merriweather', serif; /* Closest Google Font match */
+            font-weight: 900;
+            font-size: 2.2rem;
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--st-red);
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            position: relative;
+            text-shadow: 0 0 10px var(--st-glow);
+            animation: flicker 4s infinite;
+        }
+
+        .subtitle {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--st-gray);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* D&D / Hellfire Club Note Style */
+        .joke-box {
+            background: #1a1a1a;
+            color: var(--st-amber);
+            margin: 20px;
+            padding: 15px;
+            border-left: 4px solid var(--st-amber);
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            font-family: 'Courier Prime', monospace;
+        }
+
+        form {
+            padding: 20px;
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: var(--st-red);
+            font-weight: bold;
+            text-transform: uppercase;
+            text-shadow: 0 0 2px var(--st-glow);
+        }
+
+        /* 80s Computer Terminal Inputs */
+        .input-text, select {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            border: 1px solid #333;
+            color: var(--st-terminal);
+            font-family: 'Courier Prime', monospace;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            transition: 0.3s;
+        }
+
+        .input-text:focus, select:focus {
+            border-color: var(--st-terminal);
+            box-shadow: 0 0 10px rgba(51, 255, 0, 0.2);
+        }
+
+        /* Radio Buttons - Retro Toggle Style */
+        .radio-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .radio-btn input {
+            display: none;
+        }
+
+        .radio-btn span {
+            display: block;
+            padding: 10px 15px;
+            background: #111;
+            border: 1px solid #444;
+            color: #666;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .radio-btn input:checked + span {
+            background: #000;
+            border-color: var(--st-red);
+            color: var(--st-red);
+            box-shadow: 0 0 8px var(--st-glow);
+            text-shadow: 0 0 5px var(--st-red);
+        }
+
+        /* Rating Icons */
+        .rating-wrapper {
+            display: flex;
+            justify-content: space-between;
+            background: #0a0a0a;
+            padding: 15px 5px;
+            border: 1px dashed #444;
+        }
+
+        .rating-item {
+            cursor: pointer;
+            text-align: center;
+            flex: 1;
+        }
+
+        .rating-item input {
+            display: none;
+        }
+
+        .rating-item span {
+            font-size: 1.8rem;
+            opacity: 0.3;
+            transition: 0.3s;
+            display: block;
+            filter: grayscale(100%);
+        }
+        
+        .rating-item p {
+            font-size: 0.6rem;
+            margin-top: 8px;
+            color: var(--st-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Highlight Selection */
+        .rating-item input:checked + span {
+            opacity: 1;
+            filter: grayscale(0%);
+            transform: scale(1.2);
+            text-shadow: 0 0 15px var(--st-amber);
+        }
+        .rating-item input:checked + span + p {
+            color: var(--st-amber);
+        }
+
+        /* Submit Button - The Gate */
+        .submit-btn {
+            width: 100%;
+            background: transparent;
+            color: var(--st-red);
+            border: 2px solid var(--st-red);
+            padding: 18px;
+            font-family: 'Merriweather', serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 0 5px var(--st-red);
+            box-shadow: 0 0 10px rgba(255, 9, 9, 0.2);
+        }
+
+        .submit-btn:hover {
+            background: var(--st-red);
+            color: #000;
+            box-shadow: 0 0 20px var(--st-red);
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #555;
+            margin-top: 30px;
+            padding: 10px;
+            border-top: 1px solid #222;
+        }
+
+        /* Animation for Header Flickering */
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 0 0 10px var(--st-glow);
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+                opacity: 0.5;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Vibe Check</h1>
+        <div class="subtitle">Hawkins National Laboratory // Restricted</div>
+    </div>
+
+    <div class="joke-box" id="jokeBox">
+        [Loading Transmission...]
+    </div>
+
+    <form action="https://formspree.io/f/mqeaadgp" method="POST">
+        
+        <div class="question-group">
+            <label>1. Did I open a gate to the Upside Down?</label>
+            <p style="font-size: 0.8rem; margin-bottom: 8px; color:#666;">(Did I said something wrong?)</p>
+            <textarea name="did_wrong" class="input-text" rows="3" placeholder="Type here. Friends don't lie..."></textarea>
+        </div>
+
+        <div class="question-group">
+            <label>2. Comedy Rating</label>
+            <div class="radio-group">
+                <label class="radio-btn">
+                    <input type="radio" name="funny" value="yes">
+                    <span>Steve Harrington hair (Great) 🕶️</span>
+                </label>
+                <label class="radio-btn">
+                    <input type="radio" name="funny" value="trying">
+                    <span>Dustin trying (Cute) 🧢</span>
+                </label>
+                <label class="radio-btn">
+                    <input type="radio" name="funny" value="no">
+                    <span>Mouth Breather (Bad) 😤</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question-group">
+            <label>3. The Annoyance Meter</label>
+            <p style="font-size: 0.8rem; margin-bottom: 8px; color:#666;">(Did I annoy you earlier?)</p>
+            <select name="annoy_level">
+                <option value="no">No, friends don't lie. (You're good)</option>
+                <option value="maybe">A tiny bit, like a glitch in the lights.</option>
+                <option value="survey_only">Only when you overthink and send this survey.</option>
+                <option value="yes">Yes, I am telepathically blocking you.</option>
+            </select>
+        </div>
+
+        <div class="question-group">
+            <label>4. Mind Flayer Check</label>
+            <p style="font-size: 0.8rem; margin-bottom: 8px; color:#666;">Were you forced to talk earlier?</p>
+            <div class="radio-group">
+                <label class="radio-btn">
+                    <input type="radio" name="forced" value="free">
+                    <span>I have free will 🧠</span>
+                </label>
+                <label class="radio-btn">
+                    <input type="radio" name="forced" value="forced">
+                    <span>Possessed / Forced 🕸️</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question-group">
+            <label>5. Overall Rating</label>
+            <div class="rating-wrapper">
+                <label class="rating-item">
+                    <input type="radio" name="rating" value="1">
+                    <span>👹</span>
+                    <p>Demogorgon</p>
+                </label>
+                <label class="rating-item">
+                    <input type="radio" name="rating" value="2">
+                    <span>🤡</span>
+                    <p>Mouth Breather</p>
+                </label>
+                <label class="rating-item">
+                    <input type="radio" name="rating" value="3">
+                    <span>🕹️</span>
+                    <p>Arcade</p>
+                </label>
+                <label class="rating-item">
+                    <input type="radio" name="rating" value="4">
+                    <span>🧇</span>
+                    <p>Eggos</p>
+                </label>
+                <label class="rating-item">
+                    <input type="radio" name="rating" value="5">
+                    <span>🎸</span>
+                    <p>Eddie!</p>
+                </label>
+            </div>
+        </div>
+
+        <div class="question-group">
+            <label>6. Future Communication?</label>
+            <select name="talk_again">
+                <option value="yes">Copy that. Over.</option>
+                <option value="think_about_it">I need to consult the Hellfire Club.</option>
+                <option value="no">Code Red. Abort.</option>
+            </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Transmit</button>
+        
+        <div class="footer-note">
+            *Sponsored by my anxiety, which is scarier than Vecna. 
+            No refunds on emotional damage.*
+        </div>
+    </form>
+</div>
+
+<script>
+    // Stranger Things / 80s Jokes
+    const jokes = [
+        "Why is Eleven so good at math? Because she knows everything is strange(r).",
+        "What does a Demogorgon eat for breakfast? DeVours.",
+        "My anxiety is currently at a level 11.",
+        "Mornings are for coffee and contemplation... and filling out this survey.",
+        "If we die, I'm haunting you.",
+        "FRIENDS DON'T LIE (so answer honestly)."
+    ];
+
+    const jokeBox = document.getElementById('jokeBox');
+    const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+    
+    // Typing effect for the joke
+    let i = 0;
+    const txt = "> INCOMING MESSAGE: " + randomJoke; 
+    const speed = 50; 
+
+    function typeWriter() {
+        if (i < txt.length) {
+            jokeBox.innerHTML += txt.charAt(i);
+            i++;
+            setTimeout(typeWriter, speed);
+        }
+    }
+    
+    // Clear initial text and start typing
+    jokeBox.innerHTML = "";
+    typeWriter();
+
+</script>
+
+</body>
+</html>
