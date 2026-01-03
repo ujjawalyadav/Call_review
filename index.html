@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hawkins Vibe Check</title>
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Merriweather:wght@900&display=swap" rel="stylesheet">
     <style>
@@ -81,8 +81,16 @@
 
         .subtitle {
             margin-top: 10px;
-            font-size: 0.85rem;
+            font-size: .95rem;
             color: var(--st-gray);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .subtitle2 {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--st-red);
             letter-spacing: 2px;
             text-transform: uppercase;
         }
@@ -268,6 +276,7 @@
     <div class="header">
         <h1>Vibe Check</h1>
         <div class="subtitle">Hawkins National Laboratory // Restricted</div>
+        <div class="subtitle2">Hey! <b>Ujjawal</b> here. You’ve entered a harmless zone of overthinking—caused by you. Fill this form to stop me from thinking about you for atleast next 12 hours.</div>
     </div>
 
     <div class="joke-box" id="jokeBox">
@@ -376,6 +385,20 @@
 </div>
 
 <script>
+     // Disable Ctrl + scroll zoom
+  document.addEventListener('wheel', e => {
+    if (e.ctrlKey) e.preventDefault();
+  }, { passive: false });
+
+  // Disable Ctrl + + / - / 0
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey && ['+', '-', '=', '0'].includes(e.key)) {
+      e.preventDefault();
+    }
+  });
+
+  // Disable pinch zoom (mobile)
+  document.addEventListener('gesturestart', e => e.preventDefault());
     // Stranger Things / 80s Jokes
     const jokes = [
         "Why is Eleven so good at math? Because she knows everything is strange(r).",
@@ -409,5 +432,4 @@
 </script>
 
 </body>
-
 </html>
